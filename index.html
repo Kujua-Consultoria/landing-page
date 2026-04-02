@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kujua - Transformação Digital</title>
+<link href="./assets/untitled-design-1.png" rel="icon" sizes="any" type="image/png"/>
+<link href="./assets/untitled-design-1.png" rel="apple-touch-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b981",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a192f",
+                        "navy-deep": "#060d1a",
+                        "teal-accent": "#14b8a6",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(16, 25, 47, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+        button,
+        a[data-open-contact],
+        a[data-close-contact],
+        a[data-scroll-link].w-full {
+            border-radius: 0.95rem !important;
+        }
+        .circuit-line {
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            height: 1px;
+            width: 100%;
+            opacity: 0.3;
+        }
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        .logo-badge img {
+            display: block;
+            width: auto;
+            height: 10rem;
+            object-fit: contain;
+        }
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.95rem;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .lang-switch button {
+            min-width: 4.4rem;
+            border: 0;
+            padding: 0.55rem 0.8rem;
+            border-radius: 0.75rem !important;
+            background: transparent;
+            color: #cbd5e1;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .lang-switch button.is-active {
+            background: rgba(16, 185, 129, 0.18);
+            color: #ecfeff;
+        }
+        [data-section] {
+            scroll-margin-top: 110px;
+        }
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .section-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .contact-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .contact-backdrop.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .contact-modal {
+            transform: translateY(24px) scale(0.98);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .contact-backdrop.is-open .contact-modal {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            .section-reveal,
+            .contact-backdrop,
+            .contact-modal {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Navbar -->
+<header class="fixed top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-0.5">
+<div class="relative mx-auto flex max-w-[1200px] items-center gap-6">
+<a class="flex items-center" data-scroll-link="" href="#top">
+<img alt="KUJUA Logo" class="h-[10rem] w-auto object-contain" src="./assets/untitled-design-1-white-text.png"/>
+</a>
+<nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 md:flex">
+<a class="text-base font-semibold text-slate-300 hover:text-primary transition-colors" data-i18n="nav.services" data-scroll-link="" href="#servicos">Serviços</a>
+<a class="text-base font-semibold text-slate-300 hover:text-primary transition-colors" data-i18n="nav.pillars" data-scroll-link="" href="#pilares">Pilares</a>
+<a class="text-base font-semibold text-slate-300 hover:text-primary transition-colors" data-i18n="nav.about" data-scroll-link="" href="#sobre">Sobre</a>
+<a class="text-base font-semibold text-slate-300 hover:text-primary transition-colors" data-i18n="nav.methodology" data-scroll-link="" href="#metodologia">Metodologia</a>
+</nav>
+<div class="ml-auto flex items-center gap-3 md:gap-5">
+<div class="lang-switch" aria-label="Language switcher">
+<button aria-pressed="true" class="is-active" data-lang-option="pt-BR" type="button">PT-BR</button>
+<button aria-pressed="false" data-lang-option="en" type="button">ENG</button>
+</div>
+<button class="rounded-full bg-primary px-6 py-2.5 text-base font-bold text-background-dark transition-all hover:bg-teal-accent hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]" data-i18n="nav.contact" data-open-contact="" type="button">
+                Fale Conosco
+            </button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative flex min-h-screen items-center justify-center pt-20 section-reveal" data-section="" id="top">
+<!-- Abstract Background -->
+<div class="absolute inset-0 -z-10 overflow-hidden">
+<div class="absolute top-1/4 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-1/4 h-[400px] w-[400px] rounded-full bg-teal-accent/5 blur-[100px]"></div>
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+<!-- Geometric Elements -->
+<div class="absolute top-40 right-20 h-64 w-64 border border-primary/20 rounded-xl rotate-12 bg-gradient-to-br from-primary/5 to-transparent backdrop-blur-sm" data-alt="Abstract 3D geometric shape representing technical structure"></div>
+<div class="absolute bottom-40 left-10 h-48 w-48 border border-teal-accent/20 rounded-full bg-gradient-to-tr from-teal-accent/5 to-transparent backdrop-blur-md" data-alt="Abstract glowing circle for high-tech aesthetic"></div>
+</div>
+<div class="container mx-auto px-6 text-center lg:px-20">
+<div class="mx-auto max-w-4xl">
+<div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 backdrop-blur-md">
+<span class="relative flex h-2 w-2">
+<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+</span>
+<span class="text-xs font-bold uppercase tracking-widest text-primary" data-i18n="hero.badge">Inovação em Engenharia</span>
+</div>
+<h1 class="text-5xl font-black leading-tight tracking-tight text-white md:text-7xl lg:leading-[1.1]" data-i18n-html="hero.title">
+                    Transformação Digital com <br/>
+<span class="bg-gradient-to-r from-primary to-teal-accent bg-clip-text text-transparent">Responsabilidade Técnica</span>
+</h1>
+<p class="mx-auto mt-8 max-w-2xl text-lg text-slate-400 md:text-xl" data-i18n="hero.description">
+                    Desenvolvemos soluções tecnológicas robustas e escaláveis, unindo excelência em engenharia com visão estratégica para o seu negócio.
+                </p>
+<div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+<button class="w-full rounded-lg bg-primary px-10 py-4 text-base font-bold text-background-dark transition-all hover:bg-teal-accent hover:scale-105 sm:w-auto" data-i18n="hero.ctaPrimary" data-open-contact="" type="button">
+                        Iniciar Transformação
+                    </button>
+<a class="w-full rounded-lg border border-white/10 bg-white/5 px-10 py-4 text-base font-bold text-white transition-all hover:bg-white/10 sm:w-auto" data-i18n="hero.ctaSecondary" data-scroll-link="" href="#servicos">
+                        Nossos Projetos
+                    </a>
+</div>
+</div>
+</div>
+<!-- Bottom Circuit Detail -->
+<div class="absolute bottom-10 left-0 w-full flex justify-center opacity-20">
+<div class="w-1/2 h-px bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+</div>
+</section>
+<!-- Tech Specs Section -->
+<section class="py-24 section-reveal" data-section="" id="servicos">
+<div class="container mx-auto px-6 lg:px-20">
+<div class="flex flex-col items-center gap-16 lg:flex-row">
+<div class="flex-1">
+<div class="relative rounded-3xl border border-white/5 bg-navy-deep p-1">
+<div class="aspect-square overflow-hidden rounded-[22px] bg-gradient-to-br from-background-dark to-primary/20" data-alt="Abstract 3D circuit board and glowing data lines">
+<div class="flex h-full w-full items-center justify-center">
+<span class="material-symbols-outlined text-[160px] text-primary/20">memory</span>
+</div>
+</div>
+<!-- Circuit Overlay Decor -->
+<div class="absolute -top-6 -right-6 h-32 w-32 bg-primary/20 blur-3xl"></div>
+</div>
+</div>
+<div class="flex-1 space-y-8">
+<p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="services.eyebrow">Serviços</p>
+<h2 class="text-3xl font-bold text-white md:text-5xl" data-i18n="services.title">Atuação técnica orientada por impacto de negócio.</h2>
+<p class="text-lg leading-8 text-slate-400" data-i18n="services.description">A Kujua entra em cenários que exigem clareza técnica, estrutura de execução e sustentação confiável. Nossa atuação combina arquitetura, governança e entrega para resolver fragilidades críticas e preparar a operação digital para crescer com segurança.</p>
+<div class="grid gap-4 sm:grid-cols-3">
+<div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+<h3 class="text-lg font-bold text-white" data-i18n="services.card1.title">Arquitetura e estruturação</h3>
+<p class="mt-3 text-sm leading-7 text-slate-400" data-i18n="services.card1.description">Desenhamos bases técnicas, fluxos, integrações e critérios de evolução para reduzir improviso e aumentar previsibilidade.</p>
+</div>
+<div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+<h3 class="text-lg font-bold text-white" data-i18n="services.card2.title">Execução com governança</h3>
+<p class="mt-3 text-sm leading-7 text-slate-400" data-i18n="services.card2.description">Transformamos estratégia em backlog, prioridades e entregas verificáveis, com visibilidade clara para tecnologia e negócio.</p>
+</div>
+<div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+<h3 class="text-lg font-bold text-white" data-i18n="services.card3.title">Sustentação e continuidade</h3>
+<p class="mt-3 text-sm leading-7 text-slate-400" data-i18n="services.card3.description">Atuamos para estabilizar operações, reduzir riscos e garantir que os ativos digitais suportem crescimento sem fragilidade oculta.</p>
+</div>
+</div>
+<div class="pt-4">
+<a class="inline-flex items-center gap-2 font-bold text-primary hover:text-teal-accent group" data-open-contact="" href="#">
+<span data-i18n="services.link">Entender como a Kujua pode atuar</span>
+                            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pilares Section -->
+<section class="bg-navy-deep py-24 lg:py-32 section-reveal" data-section="" id="pilares">
+<div class="container mx-auto px-6 lg:px-20">
+<div class="mb-20 max-w-2xl">
+<h2 class="text-3xl font-bold text-white md:text-4xl" data-i18n="pillars.title">Os Pilares da Nossa Parceria</h2>
+<div class="mt-4 h-1 w-20 bg-primary"></div>
+<p class="mt-6 text-lg text-slate-400" data-i18n="pillars.description">
+                    Nossa metodologia é construída sobre fundamentos sólidos de engenharia, garantindo que cada linha de código agregue valor real.
+                </p>
+</div>
+<div class="grid gap-6 md:grid-cols-3">
+<!-- Card 1 -->
+<div class="glass-card group relative overflow-hidden rounded-2xl p-8 transition-all hover:-translate-y-2">
+<div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-background-dark">
+<span class="material-symbols-outlined text-3xl">terminal</span>
+</div>
+<h3 class="text-xl font-bold text-white" data-i18n="pillars.card1.title">Excelência Técnica</h3>
+<p class="mt-4 text-slate-400" data-i18n="pillars.card1.description">Arquiteturas robustas e limpas desenvolvidas com as melhores práticas globais de software engineering.</p>
+<div class="absolute -right-4 -bottom-4 opacity-5 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-8xl">code</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card group relative overflow-hidden rounded-2xl p-8 transition-all hover:-translate-y-2">
+<div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-background-dark">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+<h3 class="text-xl font-bold text-white" data-i18n="pillars.card2.title">Agilidade Estratégica</h3>
+<p class="mt-4 text-slate-400" data-i18n="pillars.card2.description">Processos otimizados para entrega contínua de valor e rápida adaptação às dinâmicas do mercado.</p>
+<div class="absolute -right-4 -bottom-4 opacity-5 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-8xl">rocket_launch</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card group relative overflow-hidden rounded-2xl p-8 transition-all hover:-translate-y-2">
+<div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-background-dark">
+<span class="material-symbols-outlined text-3xl">security</span>
+</div>
+<h3 class="text-xl font-bold text-white" data-i18n="pillars.card3.title">Segurança &amp; Resiliência</h3>
+<p class="mt-4 text-slate-400" data-i18n="pillars.card3.description">Proteção integral de ativos digitais com foco absoluto em conformidade, privacidade e disponibilidade.</p>
+<div class="absolute -right-4 -bottom-4 opacity-5 transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-8xl">shield</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section class="py-24 section-reveal" data-section="" id="sobre">
+<div class="container mx-auto px-6 lg:px-20">
+<div class="mx-auto max-w-5xl rounded-[40px] border border-white/10 bg-white/[0.03] p-10 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-sm md:p-14">
+<p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="aboutSection.eyebrow">Sobre Nós</p>
+<h2 class="mt-5 max-w-3xl text-3xl font-bold text-white md:text-5xl" data-i18n="aboutSection.title">Parceira estratégica para ambientes digitais críticos.</h2>
+<div class="mt-8 space-y-6 text-lg leading-8 text-slate-300">
+<p data-i18n="aboutSection.paragraph1">A Kujua atua como parceira estratégica em tecnologia e inovação, apoiando organizações na definição, estruturação e sustentação de ambientes digitais críticos para o negócio. Nossa atuação combina visão de negócio, arquitetura tecnológica e governança de execução, permitindo não apenas a entrega técnica, mas a criação de ambientes digitais estáveis, previsíveis e sustentáveis ao longo do tempo.</p>
+<p data-i18n="aboutSection.paragraph2">Trabalhamos com foco em responsabilidade técnica clara, redução de riscos operacionais e continuidade da operação, garantindo que os ativos digitais suportem o crescimento do negócio sem gerar fragilidade ou dependências ocultas.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="relative py-24 overflow-hidden section-reveal" data-section="" id="metodologia">
+<div class="absolute inset-0 bg-primary/5"></div>
+<div class="container relative z-10 mx-auto px-6 lg:px-20">
+<div class="glass-card rounded-[40px] p-12 md:p-20">
+<div class="mx-auto max-w-4xl text-center">
+<p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="methodology.eyebrow">Metodologia</p>
+<h2 class="mt-5 text-3xl font-bold text-white md:text-5xl" data-i18n="methodology.title">Da clareza estratégica à sustentação contínua.</h2>
+<p class="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-300" data-i18n="methodology.description">Nossa atuação organiza contextos complexos em uma jornada objetiva de diagnóstico, estruturação e evolução. Entramos para definir prioridades, reduzir risco técnico e sustentar um ambiente digital que continue operando com previsibilidade ao longo do tempo.</p>
+</div>
+<div class="mt-14 grid gap-6 md:grid-cols-3">
+<div class="rounded-3xl border border-white/10 bg-white/5 p-7">
+<p class="text-sm font-bold uppercase tracking-[0.24em] text-primary">01</p>
+<h3 class="mt-4 text-xl font-bold text-white" data-i18n="methodology.step1.title">Diagnóstico e direção</h3>
+<p class="mt-4 text-slate-400" data-i18n="methodology.step1.description">Mapeamos contexto, riscos, dependências, arquitetura e operação atual para transformar complexidade em leitura clara de prioridades.</p>
+</div>
+<div class="rounded-3xl border border-white/10 bg-white/5 p-7">
+<p class="text-sm font-bold uppercase tracking-[0.24em] text-primary">02</p>
+<h3 class="mt-4 text-xl font-bold text-white" data-i18n="methodology.step2.title">Estruturação e execução</h3>
+<p class="mt-4 text-slate-400" data-i18n="methodology.step2.description">Definimos arquitetura, backlog prioritário, critérios de aceite e governança de entrega para garantir avanço técnico com visibilidade de negócio.</p>
+</div>
+<div class="rounded-3xl border border-white/10 bg-white/5 p-7">
+<p class="text-sm font-bold uppercase tracking-[0.24em] text-primary">03</p>
+<h3 class="mt-4 text-xl font-bold text-white" data-i18n="methodology.step3.title">Sustentação e continuidade</h3>
+<p class="mt-4 text-slate-400" data-i18n="methodology.step3.description">Consolidamos ambientes mais estáveis, previsíveis e sustentáveis, reduzindo fragilidades operacionais e dependências ocultas.</p>
+</div>
+</div>
+<div class="mt-16 text-center">
+<h3 class="text-2xl font-bold text-white md:text-4xl" data-i18n="cta.title">Pronto para elevar seu padrão técnico?</h3>
+<p class="mx-auto mt-6 max-w-xl text-slate-400" data-i18n="cta.description">Agende um diagnóstico técnico gratuito com nossos especialistas e descubra como podemos acelerar seu roteiro digital.</p>
+<div class="mt-10">
+<button class="rounded-full bg-primary px-12 py-5 text-lg font-bold text-background-dark shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)] transition-all hover:scale-105" data-i18n="cta.button" data-open-contact="" type="button">
+                        Agendar Consultoria Especializada
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="border-t border-white/5 bg-navy-deep py-20">
+<div class="container mx-auto px-6 lg:px-20">
+<div class="grid gap-12 md:grid-cols-4">
+<div class="md:col-span-1">
+<div class="flex items-center mb-6">
+<img alt="KUJUA Logo" class="h-[10rem] w-auto object-contain" src="./assets/untitled-design-1-white-text.png"/>
+</div>
+<p class="text-sm text-slate-500" data-i18n="footer.description">Transformando empresas através da excelência em engenharia e tecnologia responsável.</p>
+</div>
+<div>
+<h4 class="mb-6 font-bold text-white" data-i18n="footer.quickLinks">Links Rápidos</h4>
+<ul class="space-y-3 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.about" data-scroll-link="" href="#sobre">Sobre Nós</a></li>
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.services" data-scroll-link="" href="#servicos">Nossos Serviços</a></li>
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.cases" href="#">Cases de Sucesso</a></li>
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.careers" href="#">Carreiras</a></li>
+</ul>
+</div>
+<div>
+<h4 class="mb-6 font-bold text-white" data-i18n="footer.legal">Legal</h4>
+<ul class="space-y-3 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.terms" href="#">Termos de Uso</a></li>
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.privacy" href="#">Privacidade</a></li>
+<li><a class="hover:text-primary transition-colors" data-i18n="footer.security" href="#">Segurança</a></li>
+</ul>
+</div>
+<div>
+<h4 class="mb-6 font-bold text-white" data-i18n="footer.contact">Contato</h4>
+<ul class="space-y-4 text-sm text-slate-400">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">mail</span>
+                            contato@kujua.com.br
+                        </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+<span data-i18n="footer.location">São Paulo, Brasil</span>
+                        </li>
+<li class="flex gap-4 pt-2">
+<a class="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">link</span>
+</a>
+<a class="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="mt-20 border-t border-white/5 pt-10 text-center text-xs text-slate-600" data-i18n="footer.rights">
+                © 2024 Kujua Tecnologia. Todos os direitos reservados.
+            </div>
+</div>
+</footer>
+</div>
+<div aria-hidden="true" class="contact-backdrop fixed inset-0 z-[60] flex items-center justify-center bg-background-dark/80 px-6 py-10 backdrop-blur-md" id="contact-modal">
+<div aria-labelledby="contact-modal-title" aria-modal="true" class="contact-modal w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/10 bg-navy-deep shadow-[0_30px_100px_rgba(6,13,26,0.7)]" role="dialog">
+<div class="flex items-start justify-between border-b border-white/10 px-6 py-5 md:px-8">
+<div>
+<p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="modal.eyebrow">Contato</p>
+<h2 class="mt-2 text-2xl font-black text-white md:text-3xl" data-i18n="modal.title" id="contact-modal-title">Vamos falar sobre sua operação digital.</h2>
+</div>
+<button aria-label="Fechar modal de contato" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-primary/30 hover:text-primary" data-close-contact="" data-i18n-aria-label="modal.closeAria" type="button">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid gap-8 px-6 py-6 md:grid-cols-[1fr_1.1fr] md:px-8 md:py-8">
+<div class="space-y-5">
+<p class="text-sm leading-7 text-slate-400" data-i18n="modal.description">
+                        Conte um pouco do contexto. A Kujua entra em cenarios que exigem clareza tecnica, criterio de execucao e capacidade real de entrega.
+                    </p>
+<div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+<p class="text-sm font-semibold text-white" data-i18n="modal.directContact">Contato direto</p>
+<ul class="mt-4 space-y-3 text-sm text-slate-400">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-base">mail</span>
+                                contato@kujua.com.br
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-base">call</span>
+                                (21) 97930-4433
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-base">schedule</span>
+<span data-i18n="modal.responseTime">Resposta inicial em horario comercial</span>
+                            </li>
+</ul>
+</div>
+</div>
+<form class="space-y-4" id="contact-form">
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-300" data-i18n="form.nameLabel" for="contact-name">Nome</label>
+<input class="block w-full rounded-2xl border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-primary focus:ring-primary" data-i18n-placeholder="form.namePlaceholder" id="contact-name" name="name" placeholder="Seu nome" required="" type="text"/>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-300" data-i18n="form.companyLabel" for="contact-company">Empresa</label>
+<input class="block w-full rounded-2xl border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-primary focus:ring-primary" data-i18n-placeholder="form.companyPlaceholder" id="contact-company" name="company" placeholder="Nome da empresa" type="text"/>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-300" data-i18n="form.emailLabel" for="contact-email">E-mail</label>
+<input class="block w-full rounded-2xl border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-primary focus:ring-primary" data-i18n-placeholder="form.emailPlaceholder" id="contact-email" name="email" placeholder="voce@empresa.com" required="" type="email"/>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-slate-300" data-i18n="form.messageLabel" for="contact-message">Desafio atual</label>
+<textarea class="block min-h-40 w-full rounded-2xl border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-primary focus:ring-primary" data-i18n-placeholder="form.messagePlaceholder" id="contact-message" name="message" placeholder="Descreva brevemente o contexto tecnico ou de negocio." required=""></textarea>
+</div>
+<div class="flex flex-col gap-3 pt-2 sm:flex-row">
+<button class="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-bold text-background-dark transition-all hover:bg-teal-accent" data-i18n="form.submit" data-send-email="" type="submit">
+                            Enviar por e-mail
+                        </button>
+<button class="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white transition-colors hover:border-primary/30 hover:text-primary" data-close-contact="" data-i18n="form.close" type="button">
+                            Fechar
+                        </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+        (() => {
+            const header = document.querySelector("header");
+            const modal = document.getElementById("contact-modal");
+            const openButtons = document.querySelectorAll("[data-open-contact]");
+            const closeButtons = document.querySelectorAll("[data-close-contact]");
+            const scrollLinks = document.querySelectorAll("[data-scroll-link]");
+            const sections = document.querySelectorAll(".section-reveal");
+            const form = document.getElementById("contact-form");
+            const sendEmailButton = document.querySelector("[data-send-email]");
+            const languageButtons = document.querySelectorAll("[data-lang-option]");
+            const logos = document.querySelectorAll('img[alt="KUJUA Logo"]');
+            let currentLanguage = "pt-BR";
+
+            const translations = {
+                "pt-BR": {
+                    "nav.services": "Serviços",
+                    "nav.pillars": "Pilares",
+                    "nav.about": "Sobre",
+                    "nav.methodology": "Metodologia",
+                    "nav.contact": "Fale Conosco",
+                    "hero.badge": "Inovação em Engenharia",
+                    "hero.title": "Transformação Digital com <br><span class=\"bg-gradient-to-r from-primary to-teal-accent bg-clip-text text-transparent\">Responsabilidade Técnica</span>",
+                    "hero.description": "Desenvolvemos soluções tecnológicas robustas e escaláveis, unindo excelência em engenharia com visão estratégica para o seu negócio.",
+                    "hero.ctaPrimary": "Iniciar Transformação",
+                    "hero.ctaSecondary": "Nossos Projetos",
+                    "pillars.title": "Os Pilares da Nossa Parceria",
+                    "pillars.description": "Nossa metodologia é construída sobre fundamentos sólidos de engenharia, garantindo que cada linha de código agregue valor real.",
+                    "pillars.card1.title": "Excelência Técnica",
+                    "pillars.card1.description": "Arquiteturas robustas e limpas desenvolvidas com as melhores práticas globais de software engineering.",
+                    "pillars.card2.title": "Agilidade Estratégica",
+                    "pillars.card2.description": "Processos otimizados para entrega contínua de valor e rápida adaptação às dinâmicas do mercado.",
+                    "pillars.card3.title": "Segurança & Resiliência",
+                    "pillars.card3.description": "Proteção integral de ativos digitais com foco absoluto em conformidade, privacidade e disponibilidade.",
+                    "aboutSection.eyebrow": "Sobre Nós",
+                    "aboutSection.title": "Parceira estratégica para ambientes digitais críticos.",
+                    "aboutSection.paragraph1": "A Kujua atua como parceira estratégica em tecnologia e inovação, apoiando organizações na definição, estruturação e sustentação de ambientes digitais críticos para o negócio. Nossa atuação combina visão de negócio, arquitetura tecnológica e governança de execução, permitindo não apenas a entrega técnica, mas a criação de ambientes digitais estáveis, previsíveis e sustentáveis ao longo do tempo.",
+                    "aboutSection.paragraph2": "Trabalhamos com foco em responsabilidade técnica clara, redução de riscos operacionais e continuidade da operação, garantindo que os ativos digitais suportem o crescimento do negócio sem gerar fragilidade ou dependências ocultas.",
+                    "services.eyebrow": "Serviços",
+                    "services.title": "Atuação técnica orientada por impacto de negócio.",
+                    "services.description": "A Kujua entra em cenários que exigem clareza técnica, estrutura de execução e sustentação confiável. Nossa atuação combina arquitetura, governança e entrega para resolver fragilidades críticas e preparar a operação digital para crescer com segurança.",
+                    "services.card1.title": "Arquitetura e estruturação",
+                    "services.card1.description": "Desenhamos bases técnicas, fluxos, integrações e critérios de evolução para reduzir improviso e aumentar previsibilidade.",
+                    "services.card2.title": "Execução com governança",
+                    "services.card2.description": "Transformamos estratégia em backlog, prioridades e entregas verificáveis, com visibilidade clara para tecnologia e negócio.",
+                    "services.card3.title": "Sustentação e continuidade",
+                    "services.card3.description": "Atuamos para estabilizar operações, reduzir riscos e garantir que os ativos digitais suportem crescimento sem fragilidade oculta.",
+                    "services.link": "Entender como a Kujua pode atuar",
+                    "methodology.eyebrow": "Metodologia",
+                    "methodology.title": "Da clareza estratégica à sustentação contínua.",
+                    "methodology.description": "Nossa atuação organiza contextos complexos em uma jornada objetiva de diagnóstico, estruturação e evolução. Entramos para definir prioridades, reduzir risco técnico e sustentar um ambiente digital que continue operando com previsibilidade ao longo do tempo.",
+                    "methodology.step1.title": "Diagnóstico e direção",
+                    "methodology.step1.description": "Mapeamos contexto, riscos, dependências, arquitetura e operação atual para transformar complexidade em leitura clara de prioridades.",
+                    "methodology.step2.title": "Estruturação e execução",
+                    "methodology.step2.description": "Definimos arquitetura, backlog prioritário, critérios de aceite e governança de entrega para garantir avanço técnico com visibilidade de negócio.",
+                    "methodology.step3.title": "Sustentação e continuidade",
+                    "methodology.step3.description": "Consolidamos ambientes mais estáveis, previsíveis e sustentáveis, reduzindo fragilidades operacionais e dependências ocultas.",
+                    "cta.title": "Pronto para elevar seu padrão técnico?",
+                    "cta.description": "Agende um diagnóstico técnico gratuito com nossos especialistas e descubra como podemos acelerar seu roteiro digital.",
+                    "cta.button": "Agendar Consultoria Especializada",
+                    "footer.description": "Transformando empresas através da excelência em engenharia e tecnologia responsável.",
+                    "footer.quickLinks": "Links Rápidos",
+                    "footer.about": "Sobre Nós",
+                    "footer.services": "Nossos Serviços",
+                    "footer.cases": "Cases de Sucesso",
+                    "footer.careers": "Carreiras",
+                    "footer.legal": "Legal",
+                    "footer.terms": "Termos de Uso",
+                    "footer.privacy": "Privacidade",
+                    "footer.security": "Segurança",
+                    "footer.contact": "Contato",
+                    "footer.location": "São Paulo, Brasil",
+                    "footer.rights": "© 2024 Kujua Tecnologia. Todos os direitos reservados.",
+                    "modal.eyebrow": "Contato",
+                    "modal.title": "Vamos falar sobre sua operação digital.",
+                    "modal.closeAria": "Fechar modal de contato",
+                    "modal.description": "Conte um pouco do contexto. A Kujua entra em cenarios que exigem clareza tecnica, criterio de execucao e capacidade real de entrega.",
+                    "modal.directContact": "Contato direto",
+                    "modal.responseTime": "Resposta inicial em horario comercial",
+                    "form.nameLabel": "Nome",
+                    "form.companyLabel": "Empresa",
+                    "form.emailLabel": "E-mail",
+                    "form.messageLabel": "Desafio atual",
+                    "form.namePlaceholder": "Seu nome",
+                    "form.companyPlaceholder": "Nome da empresa",
+                    "form.emailPlaceholder": "voce@empresa.com",
+                    "form.messagePlaceholder": "Descreva brevemente o contexto tecnico ou de negocio.",
+                    "form.submit": "Enviar por e-mail",
+                    "form.close": "Fechar",
+                    "email.subject": "Contato pelo site Kujua",
+                    "email.name": "Nome",
+                    "email.company": "Empresa",
+                    "email.email": "E-mail",
+                    "email.challenge": "Desafio atual"
+                },
+                "en": {
+                    "nav.services": "Services",
+                    "nav.pillars": "Pillars",
+                    "nav.about": "About",
+                    "nav.methodology": "Methodology",
+                    "nav.contact": "Contact Us",
+                    "hero.badge": "Engineering Innovation",
+                    "hero.title": "Digital Transformation with <br><span class=\"bg-gradient-to-r from-primary to-teal-accent bg-clip-text text-transparent\">Technical Accountability</span>",
+                    "hero.description": "We build robust, scalable technology solutions that combine engineering excellence with strategic vision for your business.",
+                    "hero.ctaPrimary": "Start the Transformation",
+                    "hero.ctaSecondary": "Our Projects",
+                    "pillars.title": "The Pillars of Our Partnership",
+                    "pillars.description": "Our methodology is built on solid engineering foundations, ensuring every line of code delivers real value.",
+                    "pillars.card1.title": "Technical Excellence",
+                    "pillars.card1.description": "Robust, clean architectures built with world-class software engineering practices.",
+                    "pillars.card2.title": "Strategic Agility",
+                    "pillars.card2.description": "Optimized processes for continuous value delivery and fast adaptation to market dynamics.",
+                    "pillars.card3.title": "Security & Resilience",
+                    "pillars.card3.description": "Full protection of digital assets with absolute focus on compliance, privacy, and availability.",
+                    "aboutSection.eyebrow": "About Us",
+                    "aboutSection.title": "A strategic partner for mission-critical digital environments.",
+                    "aboutSection.paragraph1": "Kujua acts as a strategic partner in technology and innovation, supporting organizations in defining, structuring, and sustaining business-critical digital environments. Our work combines business vision, technology architecture, and execution governance, enabling not only technical delivery, but the creation of digital environments that remain stable, predictable, and sustainable over time.",
+                    "aboutSection.paragraph2": "We work with a clear focus on technical accountability, operational risk reduction, and continuity of operations, ensuring that digital assets support business growth without creating fragility or hidden dependencies.",
+                    "services.eyebrow": "Services",
+                    "services.title": "Technical delivery guided by business impact.",
+                    "services.description": "Kujua steps into scenarios that demand technical clarity, execution structure, and reliable continuity. Our work combines architecture, governance, and delivery to resolve critical fragilities and prepare digital operations to grow securely.",
+                    "services.card1.title": "Architecture and structuring",
+                    "services.card1.description": "We design technical foundations, flows, integrations, and evolution criteria to reduce improvisation and increase predictability.",
+                    "services.card2.title": "Execution with governance",
+                    "services.card2.description": "We turn strategy into backlog, priorities, and verifiable deliveries, with clear visibility for both technology and business.",
+                    "services.card3.title": "Support and continuity",
+                    "services.card3.description": "We work to stabilize operations, reduce risk, and ensure digital assets can support growth without hidden fragility.",
+                    "services.link": "Understand how Kujua can engage",
+                    "methodology.eyebrow": "Methodology",
+                    "methodology.title": "From strategic clarity to continuous support.",
+                    "methodology.description": "Our approach organizes complex contexts into an objective journey of assessment, structuring, and evolution. We step in to define priorities, reduce technical risk, and sustain a digital environment that continues operating with predictability over time.",
+                    "methodology.step1.title": "Assessment and direction",
+                    "methodology.step1.description": "We map context, risks, dependencies, architecture, and current operations to turn complexity into a clear priority view.",
+                    "methodology.step2.title": "Structuring and execution",
+                    "methodology.step2.description": "We define architecture, prioritized backlog, acceptance criteria, and delivery governance to ensure technical progress with business visibility.",
+                    "methodology.step3.title": "Support and continuity",
+                    "methodology.step3.description": "We consolidate environments that are more stable, predictable, and sustainable, reducing operational fragility and hidden dependencies.",
+                    "cta.title": "Ready to raise your technical standard?",
+                    "cta.description": "Book a free technical assessment with our specialists and see how we can accelerate your digital roadmap.",
+                    "cta.button": "Book a Specialist Consultation",
+                    "footer.description": "Transforming companies through engineering excellence and responsible technology.",
+                    "footer.quickLinks": "Quick Links",
+                    "footer.about": "About Us",
+                    "footer.services": "Our Services",
+                    "footer.cases": "Success Stories",
+                    "footer.careers": "Careers",
+                    "footer.legal": "Legal",
+                    "footer.terms": "Terms of Use",
+                    "footer.privacy": "Privacy",
+                    "footer.security": "Security",
+                    "footer.contact": "Contact",
+                    "footer.location": "Sao Paulo, Brazil",
+                    "footer.rights": "© 2024 Kujua Technology. All rights reserved.",
+                    "modal.eyebrow": "Contact",
+                    "modal.title": "Let's talk about your digital operation.",
+                    "modal.closeAria": "Close contact modal",
+                    "modal.description": "Share some context. Kujua steps into scenarios that require technical clarity, execution discipline, and real delivery capability.",
+                    "modal.directContact": "Direct contact",
+                    "modal.responseTime": "Initial response during business hours",
+                    "form.nameLabel": "Name",
+                    "form.companyLabel": "Company",
+                    "form.emailLabel": "Email",
+                    "form.messageLabel": "Current challenge",
+                    "form.namePlaceholder": "Your name",
+                    "form.companyPlaceholder": "Company name",
+                    "form.emailPlaceholder": "you@company.com",
+                    "form.messagePlaceholder": "Briefly describe the technical or business context.",
+                    "form.submit": "Send by email",
+                    "form.close": "Close",
+                    "email.subject": "Contact from the Kujua website",
+                    "email.name": "Name",
+                    "email.company": "Company",
+                    "email.email": "Email",
+                    "email.challenge": "Current challenge"
+                }
+            };
+
+            const applyLanguage = (language) => {
+                const selectedLanguage = translations[language] ? language : "pt-BR";
+                currentLanguage = selectedLanguage;
+                document.documentElement.lang = selectedLanguage === "en" ? "en" : "pt-BR";
+
+                document.querySelectorAll("[data-i18n]").forEach((element) => {
+                    const key = element.dataset.i18n;
+                    if (translations[selectedLanguage][key]) {
+                        element.textContent = translations[selectedLanguage][key];
+                    }
+                });
+
+                document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+                    const key = element.dataset.i18nHtml;
+                    if (translations[selectedLanguage][key]) {
+                        element.innerHTML = translations[selectedLanguage][key];
+                    }
+                });
+
+                document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+                    const key = element.dataset.i18nPlaceholder;
+                    if (translations[selectedLanguage][key]) {
+                        element.setAttribute("placeholder", translations[selectedLanguage][key]);
+                    }
+                });
+
+                document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+                    const key = element.dataset.i18nAriaLabel;
+                    if (translations[selectedLanguage][key]) {
+                        element.setAttribute("aria-label", translations[selectedLanguage][key]);
+                    }
+                });
+
+                languageButtons.forEach((button) => {
+                    const isActive = button.dataset.langOption === selectedLanguage;
+                    button.classList.toggle("is-active", isActive);
+                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+                });
+
+                localStorage.setItem("kujua-language", selectedLanguage);
+            };
+
+            const openModal = () => {
+                modal.classList.add("is-open");
+                modal.setAttribute("aria-hidden", "false");
+                document.body.classList.add("modal-open");
+            };
+
+            const closeModal = () => {
+                modal.classList.remove("is-open");
+                modal.setAttribute("aria-hidden", "true");
+                document.body.classList.remove("modal-open");
+            };
+
+            openButtons.forEach((button) => {
+                button.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    openModal();
+                });
+            });
+
+            closeButtons.forEach((button) => {
+                button.addEventListener("click", closeModal);
+            });
+
+            modal.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    closeModal();
+                }
+            });
+
+            scrollLinks.forEach((link) => {
+                link.addEventListener("click", (event) => {
+                    const targetId = link.getAttribute("href");
+                    if (!targetId || !targetId.startsWith("#")) {
+                        return;
+                    }
+                    const target = document.querySelector(targetId);
+                    if (!target) {
+                        return;
+                    }
+                    event.preventDefault();
+                    const headerOffset = header ? header.offsetHeight + 18 : 0;
+                    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+                    window.scrollTo({ top, behavior: "smooth" });
+                });
+            });
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            sections.forEach((section) => {
+                revealObserver.observe(section);
+            });
+
+            logos.forEach((logo) => {
+                logo.src = "./assets/untitled-design-1-white-text.png";
+                logo.className = "h-[10rem] w-auto object-contain";
+                const parent = logo.parentElement;
+                if (parent) {
+                    parent.classList.add("logo-badge");
+                }
+            });
+
+            languageButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    applyLanguage(button.dataset.langOption);
+                });
+            });
+
+            applyLanguage(localStorage.getItem("kujua-language") || "pt-BR");
+
+            const sendContactEmail = () => {
+                const data = new FormData(form);
+                const subject = encodeURIComponent(translations[currentLanguage]["email.subject"]);
+                const body = encodeURIComponent(
+                    [
+                        `${translations[currentLanguage]["email.name"]}: ${data.get("name") || ""}`,
+                        `${translations[currentLanguage]["email.company"]}: ${data.get("company") || ""}`,
+                        `${translations[currentLanguage]["email.email"]}: ${data.get("email") || ""}`,
+                        "",
+                        `${translations[currentLanguage]["email.challenge"]}:`,
+                        `${data.get("message") || ""}`
+                    ].join("\n")
+                );
+                window.location.href = `mailto:contato@kujua.com.br?subject=${subject}&body=${body}`;
+                closeModal();
+            };
+
+            sendEmailButton?.addEventListener("click", (event) => {
+                event.preventDefault();
+                if (form.reportValidity()) {
+                    sendContactEmail();
+                }
+            });
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                sendContactEmail();
+            });
+        })();
+    </script>
+</body></html>
