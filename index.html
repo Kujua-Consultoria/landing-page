@@ -431,7 +431,11 @@
 </ul>
 </div>
 </div>
-<form class="space-y-4" id="contact-form">
+<form class="space-y-4" id="contact-form" action="https://formsubmit.co/comercialkujua@gmail.com" method="POST">
+<input type="hidden" name="_subject" value="Novo contato - Kujua Landing Page">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_next" value="https://kujua.vercel.app">
+<input type="hidden" name="_template" value="table">
 <div>
 <label class="mb-2 block text-sm font-medium text-slate-300" data-i18n="form.nameLabel" for="contact-name">Nome</label>
 <input class="block w-full rounded-2xl border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-primary focus:ring-primary" data-i18n-placeholder="form.namePlaceholder" id="contact-name" name="name" placeholder="Seu nome" required="" type="text"/>
@@ -450,7 +454,7 @@
 </div>
 <div class="flex flex-col gap-3 pt-2 sm:flex-row">
 <button class="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 font-bold text-background-dark transition-all hover:bg-teal-accent" data-i18n="form.submit" data-send-email="" type="submit">
-                            Enviar por e-mail
+                            Enviar mensagem
                         </button>
 <button class="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 font-bold text-white transition-colors hover:border-primary/30 hover:text-primary" data-close-contact="" data-i18n="form.close" type="button">
                             Fechar
@@ -547,7 +551,7 @@
                     "form.companyPlaceholder": "Nome da empresa",
                     "form.emailPlaceholder": "voce@empresa.com",
                     "form.messagePlaceholder": "Descreva brevemente o contexto tecnico ou de negocio.",
-                    "form.submit": "Enviar por e-mail",
+                    "form.submit": "Enviar mensagem",
                     "form.close": "Fechar",
                     "email.subject": "Contato pelo site Kujua",
                     "email.name": "Nome",
@@ -761,33 +765,10 @@
 
             applyLanguage(localStorage.getItem("kujua-language") || "pt-BR");
 
-            const sendContactEmail = () => {
-                const data = new FormData(form);
-                const subject = encodeURIComponent(translations[currentLanguage]["email.subject"]);
-                const body = encodeURIComponent(
-                    [
-                        `${translations[currentLanguage]["email.name"]}: ${data.get("name") || ""}`,
-                        `${translations[currentLanguage]["email.company"]}: ${data.get("company") || ""}`,
-                        `${translations[currentLanguage]["email.email"]}: ${data.get("email") || ""}`,
-                        "",
-                        `${translations[currentLanguage]["email.challenge"]}:`,
-                        `${data.get("message") || ""}`
-                    ].join("\n")
-                );
-                window.location.href = `mailto:contato@kujua.com.br?subject=${subject}&body=${body}`;
-                closeModal();
-            };
-
             sendEmailButton?.addEventListener("click", (event) => {
-                event.preventDefault();
                 if (form.reportValidity()) {
-                    sendContactEmail();
+                    form.submit();
                 }
-            });
-
-            form.addEventListener("submit", (event) => {
-                event.preventDefault();
-                sendContactEmail();
             });
         })();
     </script>
