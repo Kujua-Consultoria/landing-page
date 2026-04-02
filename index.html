@@ -89,6 +89,26 @@
             background: rgba(16, 185, 129, 0.18);
             color: #ecfeff;
         }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            background: #10b981;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .toast.is-visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
         [data-section] {
             scroll-margin-top: 110px;
         }
@@ -434,7 +454,6 @@
 <form class="space-y-4" id="contact-form" action="https://formsubmit.co/comercialkujua@gmail.com" method="POST">
 <input type="hidden" name="_subject" value="Novo contato - Kujua Landing Page">
 <input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_next" value="https://kujua.vercel.app">
 <input type="hidden" name="_template" value="table">
 <div>
 <label class="mb-2 block text-sm font-medium text-slate-300" data-i18n="form.nameLabel" for="contact-name">Nome</label>
@@ -765,11 +784,54 @@
 
             applyLanguage(localStorage.getItem("kujua-language") || "pt-BR");
 
+            const showToast = (msg) => {
+                const toast = document.getElementById("toast-success");
+                toast.textContent = msg;
+                toast.classList.add("is-visible");
+                setTimeout(() => toast.classList.remove("is-visible"), 4000);
+            };
+
+            const submitForm = async () => {
+                const btn = sendEmailButton;
+                const originalText = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = "Enviando...";
+                try {
+                    const data = new FormData(form);
+                    const res = await fetch(form.action, {
+                        method: "POST",
+                        body: data,
+                        headers: { "Accept": "application/json" }
+                    });
+                    if (res.ok) {
+                        form.reset();
+                        closeModal();
+                        showToast(currentLanguage === "en" ? "Message sent successfully!" : "Mensagem enviada com sucesso!");
+                    } else {
+                        showToast(currentLanguage === "en" ? "Error sending. Try again." : "Erro ao enviar. Tente novamente.");
+                    }
+                } catch {
+                    showToast(currentLanguage === "en" ? "Error sending. Try again." : "Erro ao enviar. Tente novamente.");
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            };
+
             sendEmailButton?.addEventListener("click", (event) => {
+                event.preventDefault();
                 if (form.reportValidity()) {
-                    form.submit();
+                    submitForm();
+                }
+            });
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                if (form.reportValidity()) {
+                    submitForm();
                 }
             });
         })();
     </script>
-</body></html>
+<div class="toast" id="toast-success">Mensagem enviada com sucesso!</div>
+    </body></html>
