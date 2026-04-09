@@ -73,7 +73,7 @@
             background: rgba(255, 255, 255, 0.04);
         }
         .lang-switch button {
-            min-width: 4.4rem;
+            min-width: 3.2rem;
             border: 0;
             padding: 0.55rem 0.8rem;
             border-radius: 0.75rem !important;
@@ -142,6 +142,17 @@
         body.modal-open {
             overflow: hidden;
         }
+
+        @media (max-width: 640px) {
+            .lang-switch button {
+                min-width: 2.8rem;
+                padding: 0.4rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            .logo-badge img {
+                height: 5rem;
+            }
+        }
         @media (prefers-reduced-motion: reduce) {
             html {
                 scroll-behavior: auto;
@@ -157,10 +168,10 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
 <div class="relative flex min-h-screen w-full flex-col">
 <!-- Navbar -->
-<header class="fixed top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-0.5">
-<div class="relative mx-auto flex max-w-[1200px] items-center gap-6">
+<header class="fixed top-0 z-50 w-full border-b border-white/5 bg-background-dark/80 backdrop-blur-md px-4 md:px-6 lg:px-20 py-0.5">
+<div class="relative mx-auto flex max-w-[1200px] items-center gap-2 md:gap-6">
 <a class="flex items-center" data-scroll-link="" href="#top">
-<img alt="KUJUA Logo" class="h-[10rem] w-auto object-contain" src="./assets/untitled-design-1-white-text.png"/>
+<img alt="KUJUA Logo" class="h-[5rem] md:h-[7rem] w-auto object-contain" src="./assets/untitled-design-1-white-text.png"/>
 </a>
 <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 md:flex">
 <a class="text-base font-semibold text-slate-300 hover:text-primary transition-colors" data-i18n="nav.services" data-scroll-link="" href="#servicos">Serviços</a>
@@ -174,7 +185,7 @@
 <button aria-pressed="true" class="is-active" data-lang-option="pt-BR" type="button">PT-BR</button>
 <button aria-pressed="false" data-lang-option="en" type="button">ENG</button>
 </div>
-<button class="rounded-full bg-primary px-6 py-2.5 text-base font-bold text-background-dark transition-all hover:bg-teal-accent hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]" data-i18n="nav.contact" data-open-contact="" type="button">
+<button class="rounded-full bg-primary px-3 py-2 text-sm md:px-6 md:py-2.5 md:text-base font-bold text-background-dark transition-all hover:bg-teal-accent hover:shadow-[0_0_20px_rgba(16,185,129,0.4)]" data-i18n="nav.contact" data-open-contact="" type="button">
                 Fale Conosco
             </button>
 </div>
@@ -191,7 +202,7 @@
 <div class="absolute top-40 right-20 h-64 w-64 border border-primary/20 rounded-xl rotate-12 bg-gradient-to-br from-primary/5 to-transparent backdrop-blur-sm" data-alt="Abstract 3D geometric shape representing technical structure"></div>
 <div class="absolute bottom-40 left-10 h-48 w-48 border border-teal-accent/20 rounded-full bg-gradient-to-tr from-teal-accent/5 to-transparent backdrop-blur-md" data-alt="Abstract glowing circle for high-tech aesthetic"></div>
 </div>
-<div class="container mx-auto px-6 text-center lg:px-20">
+<div class="container mx-auto px-4 text-center sm:px-6 lg:px-20">
 <div class="mx-auto max-w-4xl">
 <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 backdrop-blur-md">
 <span class="relative flex h-2 w-2">
@@ -200,7 +211,7 @@
 </span>
 <span class="text-xs font-bold uppercase tracking-widest text-primary" data-i18n="hero.badge">Inovação em Engenharia</span>
 </div>
-<h1 class="text-5xl font-black leading-tight tracking-tight text-white md:text-7xl lg:leading-[1.1]" data-i18n-html="hero.title">
+<h1 class="text-3xl font-black leading-tight tracking-tight text-white sm:text-5xl md:text-7xl lg:leading-[1.1]" data-i18n-html="hero.title">
                     Transformação Digital com <br/>
 <span class="bg-gradient-to-r from-primary to-teal-accent bg-clip-text text-transparent">Responsabilidade Técnica</span>
 </h1>
@@ -223,8 +234,8 @@
 </div>
 </section>
 <!-- Tech Specs Section -->
-<section class="py-24 section-reveal" data-section="" id="servicos">
-<div class="container mx-auto px-6 lg:px-20">
+<section class="py-12 sm:py-24 section-reveal" data-section="" id="servicos">
+<div class="container mx-auto px-4 sm:px-6 lg:px-20">
 <div class="flex flex-col items-center gap-16 lg:flex-row">
 <div class="flex-1">
 <div class="relative rounded-3xl border border-white/5 bg-navy-deep p-1">
@@ -266,8 +277,8 @@
 </div>
 </section>
 <!-- Pilares Section -->
-<section class="bg-navy-deep py-24 lg:py-32 section-reveal" data-section="" id="pilares">
-<div class="container mx-auto px-6 lg:px-20">
+<section class="bg-navy-deep py-12 sm:py-24 lg:py-32 section-reveal" data-section="" id="pilares">
+<div class="container mx-auto px-4 sm:px-6 lg:px-20">
 <div class="mb-20 max-w-2xl">
 <h2 class="text-3xl font-bold text-white md:text-4xl" data-i18n="pillars.title">Os Pilares da Nossa Parceria</h2>
 <div class="mt-4 h-1 w-20 bg-primary"></div>
@@ -313,9 +324,9 @@
 </div>
 </section>
 <!-- About Section -->
-<section class="py-24 section-reveal" data-section="" id="sobre">
-<div class="container mx-auto px-6 lg:px-20">
-<div class="mx-auto max-w-5xl rounded-[40px] border border-white/10 bg-white/[0.03] p-10 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-sm md:p-14">
+<section class="py-12 sm:py-24 section-reveal" data-section="" id="sobre">
+<div class="container mx-auto px-4 sm:px-6 lg:px-20">
+<div class="mx-auto max-w-5xl rounded-[24px] border border-white/10 bg-white/[0.03] p-6 sm:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-sm md:p-14">
 <p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="aboutSection.eyebrow">Sobre Nós</p>
 <h2 class="mt-5 max-w-3xl text-3xl font-bold text-white md:text-5xl" data-i18n="aboutSection.title">Parceira estratégica para ambientes digitais críticos.</h2>
 <div class="mt-8 space-y-6 text-lg leading-8 text-slate-300">
@@ -326,8 +337,8 @@
 </div>
 </section>
 <!-- AI Services Section -->
-<section class="bg-navy-deep py-24 lg:py-32 section-reveal" data-section="" id="inteligencia-artificial">
-<div class="container mx-auto px-6 lg:px-20">
+<section class="bg-navy-deep py-12 sm:py-24 lg:py-32 section-reveal" data-section="" id="inteligencia-artificial">
+<div class="container mx-auto px-4 sm:px-6 lg:px-20">
 <div class="mb-20 max-w-3xl">
 <p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="ai.eyebrow">Inteligencia Artificial</p>
 <h2 class="mt-5 text-3xl font-bold text-white md:text-5xl" data-i18n="ai.title">IA aplicada com criterio tecnico e impacto real.</h2>
@@ -440,10 +451,10 @@
 </div>
 </section>
 <!-- CTA Section -->
-<section class="relative py-24 overflow-hidden section-reveal" data-section="" id="metodologia">
+<section class="relative py-12 sm:py-24 overflow-hidden section-reveal" data-section="" id="metodologia">
 <div class="absolute inset-0 bg-primary/5"></div>
 <div class="container relative z-10 mx-auto px-6 lg:px-20">
-<div class="glass-card rounded-[40px] p-12 md:p-20">
+<div class="glass-card rounded-[24px] p-6 sm:p-12 md:p-20">
 <div class="mx-auto max-w-4xl text-center">
 <p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="methodology.eyebrow">Metodologia</p>
 <h2 class="mt-5 text-3xl font-bold text-white md:text-5xl" data-i18n="methodology.title">Da clareza estratégica à sustentação contínua.</h2>
@@ -478,12 +489,12 @@
 </div>
 </section>
 <!-- Footer -->
-<footer class="border-t border-white/5 bg-navy-deep py-20">
-<div class="container mx-auto px-6 lg:px-20">
+<footer class="border-t border-white/5 bg-navy-deep py-10 sm:py-20">
+<div class="container mx-auto px-4 sm:px-6 lg:px-20">
 <div class="grid gap-12 md:grid-cols-4">
 <div class="md:col-span-1">
 <div class="flex items-center mb-6">
-<img alt="KUJUA Logo" class="h-[10rem] w-auto object-contain" src="./assets/untitled-design-1-white-text.png"/>
+<img alt="KUJUA Logo" class="h-[6rem] md:h-[10rem] w-auto object-contain" src="./assets/untitled-design-1-white-text.png"/>
 </div>
 <p class="text-sm text-slate-500" data-i18n="footer.description">Transformando empresas através da excelência em engenharia e tecnologia responsável.</p>
 </div>
@@ -526,14 +537,14 @@
 </ul>
 </div>
 </div>
-<div class="mt-20 border-t border-white/5 pt-10 text-center text-xs text-slate-600" data-i18n="footer.rights">
+<div class="mt-10 sm:mt-20 border-t border-white/5 pt-6 sm:pt-10 text-center text-xs text-slate-600" data-i18n="footer.rights">
                 © 2024 Kujua Tecnologia. Todos os direitos reservados.
             </div>
 </div>
 </footer>
 </div>
-<div aria-hidden="true" class="contact-backdrop fixed inset-0 z-[60] flex items-center justify-center bg-background-dark/80 px-6 py-10 backdrop-blur-md" id="contact-modal">
-<div aria-labelledby="contact-modal-title" aria-modal="true" class="contact-modal w-full max-w-4xl overflow-hidden rounded-[32px] border border-white/10 bg-navy-deep shadow-[0_30px_100px_rgba(6,13,26,0.7)]" role="dialog">
+<div aria-hidden="true" class="contact-backdrop fixed inset-0 z-[60] flex items-center justify-center bg-background-dark/80 px-3 py-4 sm:px-6 sm:py-10 backdrop-blur-md" id="contact-modal">
+<div aria-labelledby="contact-modal-title" aria-modal="true" class="contact-modal w-full max-w-4xl overflow-hidden rounded-[20px] sm:rounded-[32px] max-h-[90vh] overflow-y-auto border border-white/10 bg-navy-deep shadow-[0_30px_100px_rgba(6,13,26,0.7)]" role="dialog">
 <div class="flex items-start justify-between border-b border-white/10 px-6 py-5 md:px-8">
 <div>
 <p class="text-xs font-bold uppercase tracking-[0.3em] text-primary" data-i18n="modal.eyebrow">Contato</p>
